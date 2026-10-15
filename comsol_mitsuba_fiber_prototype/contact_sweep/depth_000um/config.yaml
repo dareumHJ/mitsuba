@@ -1,0 +1,35 @@
+meshes:
+  core_boundary: core_boundary.ply
+  cladding_air: cladding_air.ply
+  cladding_contact: cladding_contact.ply
+  detector: detector.ply
+  silicone_body: silicone_body.ply
+ior:
+  core: 1.492
+  cladding: 1.402
+  air: 1.000277
+  silicone: 1.41
+flip_normals:
+  core_boundary: false
+  cladding_air: false
+  cladding_contact: false
+  detector: false
+source:
+  center:
+  - 0.0
+  - 0.0
+  - 0.001
+  axis:
+  - 0.0
+  - 0.0
+  - 1.0
+  radius: 0.0
+  theta_max_deg: 15.0
+detector:
+  core_radius: 0.12
+  exit_fresnel: true
+simulation:
+  rays: 100000
+  max_bounces: 5000
+  seed: 1
+  variant: cuda_ad_rgb

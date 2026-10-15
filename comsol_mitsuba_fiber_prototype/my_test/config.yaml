@@ -1,0 +1,39 @@
+# Synthetic test: 240/250 um step-index fiber, lambda = 630 nm.
+# Units: mm. Paths are relative to this file.
+meshes:
+  core_boundary: prepared/core_boundary.ply
+  cladding_air: prepared/cladding_air.ply
+  cladding_contact: prepared/cladding_contact.ply   # absent -> no contact
+  detector: prepared/detector.ply
+
+# Indices at 630 nm (RGB variant: wavelength enters only through these values).
+ior:
+  core: 1.492
+  cladding: 1.402
+  air: 1.000277      # ambient medium around the fiber and at the output end
+                      # (used for cladding/air TIR and exit Fresnel)
+  silicone: 1.41
+
+flip_normals:
+  core_boundary: false
+  cladding_air: false
+  cladding_contact: false
+  detector: false
+
+source:
+  # Point source on the fiber axis, 1 um inside the input end face.
+  center: [0.0, 0.0, 0.001]
+  axis: [0.0, 0.0, 1.0]
+  radius: 0.0
+  # Isotropic cone, half-angle measured inside the core glass.
+  theta_max_deg: 15.0
+
+detector:
+  core_radius: 0.12      # split output into core (r < 120 um) / cladding
+  exit_fresnel: true     # weight by glass -> air Fresnel transmittance
+
+simulation:
+  rays: 100000
+  max_bounces: 5000
+  seed: 1
+  variant: cuda_ad_rgb

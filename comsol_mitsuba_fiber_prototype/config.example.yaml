@@ -1,0 +1,50 @@
+meshes:
+  core_boundary: prepared/core_boundary.ply
+  cladding_air: prepared/cladding_air.ply
+  cladding_contact: prepared/cladding_contact.ply
+  detector: prepared/detector.ply
+
+ior:
+  core: 1.49
+  cladding: 1.40
+  air: 1.000277      # ambient medium around the fiber and at the output end
+                      # (used for cladding/air TIR and exit Fresnel)
+  silicone: 1.41
+
+# If a surface's normals are backwards, switch the corresponding flag.
+flip_normals:
+  core_boundary: false
+  cladding_air: false
+  cladding_contact: false
+  detector: false
+
+source:
+  # Same coordinate units as the exported COMSOL mesh.
+  # Put the source slightly inside the core at the input end.
+  center: [0.0, 0.0, 0.05]
+  axis: [0.0, 0.0, 1.0]
+  radius: 0.45
+
+  # Use either launch_na OR theta_max_deg.
+  # launch_na is interpreted as the conventional fiber NA in air and
+  # converted to an internal axial half-angle asin(NA / n_core).
+  launch_na: 0.50
+  # theta_max_deg: 18.0
+
+detector:
+  # Optional: split detected power into core (r < core_radius from the
+  # detector center) and cladding. Same units as the mesh.
+  # core_radius: 0.12
+  # Weight each detected ray by the Fresnel transmittance from glass into
+  # ior.air (or exit_ior), i.e. report power leaving the end face.
+  exit_fresnel: false
+
+simulation:
+  rays: 100000
+  max_bounces: 1000
+  seed: 1
+  variant: cuda_ad_rgb
+  # Secondary-ray offset, relative to (1 + max|coordinate|). Mitsuba's
+  # spawn_ray() default (~9e-5) is ~4.5 um at 50 mm: too large for a thin
+  # cladding. Check results are insensitive between 2**-18 and 2**-22.
+  ray_offset_rel: 9.5367431640625e-07   # 2**-20
